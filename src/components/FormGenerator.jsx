@@ -4,10 +4,12 @@ import html2canvas from 'html2canvas';
 import logo from '../assets/images.jpg';
 
 
+
 export default function MescomReportForm() {
   const printRef = useRef();
 
   const [data, setData] = useState({
+    pageno:'',
     place: '',
     capacity: '',
     starRating: '',
@@ -24,24 +26,44 @@ export default function MescomReportForm() {
     eeLetter: '',
   });
 
-  const [docNumber, setDocNumber] = useState(0);
+ 
+  const [errors, setErrors] = useState({});
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
-useEffect(() => {
-  const lastNumber = localStorage.getItem('mescomDocNumber');
-  const newNumber = lastNumber ? parseInt(lastNumber) + 1 : 1;
-  localStorage.setItem('mescomDocNumber', newNumber);
-  setDocNumber(newNumber);
-}, []);
-
-
+ 
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: '' });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!data.place.trim()) newErrors.place = 'Subdivision is required';
+    if (!data.capacity.trim()) newErrors.capacity = 'Capacity is required';
+    if (!data.starRating.trim()) newErrors.starRating = 'Star rating is required';
+    if (!data.sealNameplate.trim()) newErrors.sealNameplate = 'Seal Nameplate is required';
+    if (!data.sealMainTank.trim()) newErrors.sealMainTank = 'Seal Main Tank is required';
+    if (!data.manufacturer.trim()) newErrors.manufacturer = 'Manufacturer is required';
+    if (!data.serialNumber.trim()) newErrors.serialNumber = 'Serial Number is required';
+    if (!data.testDate) newErrors.testDate = 'Test date is required';
+    if (!data.fee.trim() || isNaN(data.fee)) newErrors.fee = 'Valid fee is required';
+    if (!data.receipt.trim()) newErrors.receipt = 'Receipt details are required';
+    if (!data.customer.trim()) newErrors.customer = 'Customer name is required';
+    if (!data.village.trim()) newErrors.village = 'Village is required';
+    if (!data.sanctionLetter.trim()) newErrors.sanctionLetter = 'Sanction Letter info is required';
+    if (!data.eeLetter.trim()) newErrors.eeLetter = 'EE Letter info is required';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const generatePDF = async () => {
+    setFormSubmitted(true);
+    if (!validateForm()) return;
     const element = printRef.current;
-    const canvas = await html2canvas(element);
+    const canvas = await html2canvas(element, { scale: 2 });
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -49,32 +71,105 @@ useEffect(() => {
     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
     pdf.save('mescom-report.pdf');
   };
+  const dropdownOptions = {
+    place: ['SHIMOGA RSD', 'SHIMOGA CSD-1', 'SHIMOGA CSD-2', 'SHIMOGA CSD-3', 'THIRTHAHALLI','KUMSI','SHIKARIPURA',
+      'ANAVATTI','SHIRALKOPPA','SAGARA','SORABA','HOSANAGARA'
+    ],
+    capacity: ['25 KVA', '63 KVA', '100 KVA', '250 KVA'],
+    starRating: [ '3 Star', '4 Star', '5 Star'],
+    
+    manufacturer: ['Nagashree enterprises', 'R V Transformers','Chaitanya electric company' ,'Sreenevaasa concret products'],
+    serialNumber: ['TR001', 'TR002', 'TR003'],
+    village: ['Kadur', 'Hosadurga', 'Tarikere', 'Ajjampura'],
+  };
+
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Times New Roman' }}>
-        
       <h2>MESCOM Transformer Test Report</h2>
       <form style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-        <input name="place" placeholder="Place" onChange={handleChange}/>
-        <input name="capacity" placeholder="Capacity (e.g. 100 KVA)" onChange={handleChange} />
-        <input name="starRating" placeholder="Star Rating (e.g. 5 Star)" onChange={handleChange} />
-        <input name="sealNameplate" placeholder="Seal No. Nameplate" onChange={handleChange} />
-        <input name="sealMainTank" placeholder="Seal No. Main Tank" onChange={handleChange} />
-        <input name="manufacturer" placeholder="Manufacturer" onChange={handleChange} />
-        <input name="serialNumber" placeholder="Transformer Serial No" onChange={handleChange} />
-        <input type="date" name="testDate" onChange={handleChange} />
-        <input name="fee" placeholder="Testing Fee (e.g. 1180)" onChange={handleChange} />
-        <input name="receipt" placeholder="Receipt No & Date (e.g. 3361/4.4.25)" onChange={handleChange} />
-        <input name="customer" placeholder="Customer Name" onChange={handleChange} />
-        <input name="village" placeholder="Village" onChange={handleChange} />
-        <input name="sanctionLetter" placeholder="Sanction Letter No & Date" onChange={handleChange} />
-        <input name="eeLetter" placeholder="EE Letter No & Date" onChange={handleChange} />
+        {Object.entries({
+          pageno:'Page No',
+          place: 'Subdivision',
+          capacity: 'Capacity (e.g. 100 KVA)',
+          starRating: 'Star Rating (e.g. 5 Star)',
+          sealNameplate: 'Seal No. Nameplate',
+          sealMainTank: 'Seal No. Main Tank',
+          manufacturer: 'Manufacturer',
+          serialNumber: 'Transformer Serial No',
+          testDate: 'Test Date',
+          fee: 'Testing Fee (e.g. 1180)',
+          receipt: 'Receipt No & Date (e.g. 3361/4.4.25)',
+          customer: 'Customer Name',
+          village: 'Village',
+          sanctionLetter: 'Sanction Letter No & Date',
+          eeLetter: 'EE Letter No & Date',
+         }).map(([name, label]) => (
+          <div key={name} style={{ display: 'flex', flexDirection: 'column' }}>
+            {dropdownOptions[name] ? (
+  <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <select
+      name={name}
+      value={data[name]}
+      onChange={handleChange}
+      style={{
+        padding: '8px',
+        border: errors[name] ? '1px solid red' : '1px solid #ccc',
+        marginBottom: '5px'
+      }}
+    >
+      <option value="">Select {label}</option>
+      {dropdownOptions[name].map((option) => (
+        <option key={option} value={option}>{option}</option>
+      ))}
+      <option value="custom">Other (Type manually)</option>
+    </select>
+    {data[name] === 'custom' && (
+      <input
+        type="text"
+        placeholder={`Enter custom ${label}`}
+        name={name}
+        onChange={handleChange}
+        style={{
+          padding: '8px',
+          border: errors[name] ? '1px solid red' : '1px solid #ccc',
+        }}
+      />
+    )}
+  </div>
+) : (
+
+      <input
+        type="text"
+        placeholder={`Enter custom ${label}`}
+        name={name}
+        onChange={handleChange}
+        style={{
+          padding: '8px',
+          border: errors[name] ? '1px solid red' : '1px solid #ccc',
+        }}
+      />
+            )}
+            {formSubmitted && errors[name] && (
+              <span style={{ color: 'red', fontSize: '12px' }}>{errors[name]}</span>
+            )}
+          </div>
+        ))}
       </form>
+
+
+      {formSubmitted && Object.keys(errors).length > 0 && (
+        <div style={{ color: 'red', marginTop: '10px' }}>
+          Please fill in all required fields correctly before generating the PDF.
+        </div>
+      )}
 
       <button onClick={generatePDF} style={{ margin: '20px 0' }}>Download PDF</button>
 
+      
+
       <div ref={printRef} style={{ padding: '20px', border: '1px solid #ccc', backgroundColor: '#fff', width: '800px', fontFamily: 'Times New Roman' }}>
-        <h2 style={{textAlign:'right'}} >{docNumber}</h2>
+        <h2 style={{textAlign:'right'}} >{data.pageno}</h2>
         <div style={{
   display: 'flex',
   alignItems: 'center',
