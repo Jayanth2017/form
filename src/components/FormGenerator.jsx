@@ -90,20 +90,26 @@ export default function MescomReportForm() {
       <form style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
         {Object.entries({
           pageno:'Page No',
+                                serialNumber: 'Transformer Serial No',
           place: 'Subdivision',
-          capacity: 'Capacity (e.g. 100 KVA)',
-          starRating: 'Star Rating (e.g. 5 Star)',
-          sealNameplate: 'Seal No. Nameplate',
-          sealMainTank: 'Seal No. Main Tank',
-          manufacturer: 'Manufacturer',
-          serialNumber: 'Transformer Serial No',
-          testDate: 'Test Date',
-          fee: 'Testing Fee (e.g. 1180)',
-          receipt: 'Receipt No & Date (e.g. 3361/4.4.25)',
+                                sealNameplate: 'Seal No. Nameplate',
+          sanctionLetter: 'Power Sanction No & Date', 
+                                sealMainTank: 'Seal No. Main Tank', 
+          eeLetter: 'Ee ltr No & Date', 
+                                capacity: 'Capacity (e.g. 100 KVA)',
           customer: 'Customer Name',
+                              starRating: 'Star Rating (e.g. 5 Star)',
           village: 'Village',
-          sanctionLetter: 'Sanction Letter No & Date',
-          eeLetter: 'EE Letter No & Date',
+                             fee: 'Testing Fee (e.g. 1180)',
+          receipt: 'Receipt No & Date (e.g. 3361/4.4.25)',
+                              testDate: 'Test Date',
+          manufacturer: 'Manufacturers',
+                              
+          
+          
+          
+          
+          
          }).map(([name, label]) => (
           <div key={name} style={{ display: 'flex', flexDirection: 'column' }}>
             {dropdownOptions[name] ? (
