@@ -20,6 +20,9 @@ export default function MescomReportForm() {
     testDate: '',
     fee: '',
     receipt: '',
+    reseptdate:'',
+    powerstationdate: '',
+    eltrdate: '',
     customer: '',
     village: '',
     sanctionLetter: '',
@@ -29,9 +32,13 @@ export default function MescomReportForm() {
  
   const [errors, setErrors] = useState({});
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [customInputs, setCustomInputs] = useState({});
+  const [customSelected, setCustomSelected] = useState({});
+  
+
 
  
-
+  
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: '' });
@@ -69,7 +76,7 @@ export default function MescomReportForm() {
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('mescom-report.pdf');
+    pdf.save(data.pageno+'.pdf');
   };
   const dropdownOptions = {
     place: ['SHIMOGA RSD', 'SHIMOGA CSD-1', 'SHIMOGA CSD-2', 'SHIMOGA CSD-3', 'THIRTHAHALLI','KUMSI','SHIKARIPURA',
@@ -79,8 +86,8 @@ export default function MescomReportForm() {
     starRating: [ '3 Star', '4 Star', '5 Star'],
     
     manufacturer: ['Nagashree enterprises', 'R V Transformers','Chaitanya electric company' ,'Sreenevaasa concret products'],
-    serialNumber: ['TR001', 'TR002', 'TR003'],
-    village: ['Kadur', 'Hosadurga', 'Tarikere', 'Ajjampura'],
+  
+    
   };
 
 
@@ -93,19 +100,22 @@ export default function MescomReportForm() {
                                 serialNumber: 'Transformer Serial No',
           place: 'Subdivision',
                                 sealNameplate: 'Seal No. Nameplate',
-          sanctionLetter: 'Power Sanction No & Date', 
-                                sealMainTank: 'Seal No. Main Tank', 
-          eeLetter: 'Ee ltr No & Date', 
+          sanctionLetter: 'Power Sanction No', 
+                                sealMainTank: 'Seal No. Main Tank',
+           powerstationdate: 'Power Sanction Date',
+                                manufacturer: 'Manufacturers',                      
+          eeLetter: 'Ee ltr No ', 
                                 capacity: 'Capacity (e.g. 100 KVA)',
+          eltrdate: 'Ee ltr Date', 
+                                 testDate: 'Test Date',
           customer: 'Customer Name',
                               starRating: 'Star Rating (e.g. 5 Star)',
           village: 'Village',
                              fee: 'Testing Fee (e.g. 1180)',
-          receipt: 'Receipt No & Date (e.g. 3361/4.4.25)',
-                              testDate: 'Test Date',
-          manufacturer: 'Manufacturers',
-                              
+          receipt: 'Receipt No  (e.g. 3361)',
+                             reseptdate:'Receipt Date (e.g. 4.4.25)',
           
+                              
           
           
           
@@ -116,8 +126,17 @@ export default function MescomReportForm() {
   <div style={{ display: 'flex', flexDirection: 'column' }}>
     <select
       name={name}
-      value={data[name]}
-      onChange={handleChange}
+      value={customSelected[name] ? 'custom' : data[name]}
+      onChange={(e) => {
+        const value = e.target.value;
+        if (value === 'custom') {
+          setCustomSelected({ ...customSelected, [name]: true });
+          setData({ ...data, [name]: '' });
+        } else {
+          setCustomSelected({ ...customSelected, [name]: false });
+          setData({ ...data, [name]: value });
+        }
+      }}
       style={{
         padding: '8px',
         border: errors[name] ? '1px solid red' : '1px solid #ccc',
@@ -130,12 +149,17 @@ export default function MescomReportForm() {
       ))}
       <option value="custom">Other (Type manually)</option>
     </select>
-    {data[name] === 'custom' && (
+    {customSelected[name] && (
       <input
         type="text"
         placeholder={`Enter custom ${label}`}
+        value={customInputs[name] || ''}
+        onChange={(e) => {
+          const value = e.target.value;
+          setCustomInputs({ ...customInputs, [name]: value });
+          setData({ ...data, [name]: value });
+        }}
         name={name}
-        onChange={handleChange}
         style={{
           padding: '8px',
           border: errors[name] ? '1px solid red' : '1px solid #ccc',
@@ -144,21 +168,21 @@ export default function MescomReportForm() {
     )}
   </div>
 ) : (
-
-      <input
-        type="text"
-        placeholder={`Enter custom ${label}`}
-        name={name}
-        onChange={handleChange}
-        style={{
-          padding: '8px',
-          border: errors[name] ? '1px solid red' : '1px solid #ccc',
-        }}
-      />
-            )}
-            {formSubmitted && errors[name] && (
-              <span style={{ color: 'red', fontSize: '12px' }}>{errors[name]}</span>
-            )}
+  <input
+    type={name.toLowerCase().includes('date') ? 'date' : 'text'}
+    placeholder={`Enter ${label}`}
+    name={name}
+    value={data[name]}
+    onChange={handleChange}
+    style={{
+      padding: '8px',
+      border: errors[name] ? '1px solid red' : '1px solid #ccc',
+    }}
+  />
+)}
+{formSubmitted && errors[name] && (
+  <span style={{ color: 'red', fontSize: '12px' }}>{errors[name]}</span>
+)}
           </div>
         ))}
       </form>
