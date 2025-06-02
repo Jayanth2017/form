@@ -27,6 +27,7 @@ export default function MescomReportForm() {
     village: '',
     sanctionLetter: '',
     eeLetter: '',
+    layout: '',
   });
 
  
@@ -86,7 +87,10 @@ export default function MescomReportForm() {
     starRating: [ '3 Star', '4 Star', '5 Star'],
     
     manufacturer: ['Nagashree enterprises', 'R V Transformers','Chaitanya electric company' ,'Sreenevaasa concret products'],
-  
+    layout: ['LAYOUT',
+'DWS',
+'MSB',
+'ADPS']
     
   };
 
@@ -114,6 +118,7 @@ export default function MescomReportForm() {
                              fee: 'Testing Fee (e.g. 1180)',
           receipt: 'Receipt No  (e.g. 3361)',
                              reseptdate:'Receipt Date (e.g. 4.4.25)',
+                             layout: 'layout',
           
                               
           
@@ -234,7 +239,8 @@ aeedtrsmg@rediffmail.com
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Ref:</strong> 1) Power Sanction Letter No: {data.sanctionLetter} Dated:{data.powerstationdate}<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) EE Letter No: {data.eeLetter} Dated:{data.eltrdate}</p>
         <p>
-          Adverting to the above subject, 01 no of {data.capacity} {data.starRating} Distribution Transformer was tested at Shimoga Repair Center by the Asst Engineer (Ele)-2, DTR, MESCOM, Shimoga on {data.testDate}. The Tested Transformer is to be installed to LAYOUT in favour of {data.customer}, {data.village} village under self execution. The tested results of Transformer are found satisfactorily.
+          Adverting to the above subject, 01 no of {data.capacity} {data.starRating} Distribution Transformer was tested at Shimoga Repair Center by the Asst Engineer (Ele)-2, DTR, MESCOM, Shimoga on {data.testDate}. The Tested Transformer is to be installed to {data.layout
+          } in favour of {data.customer}, {data.village} village under self execution. The tested results of Transformer are found satisfactorily.
         </p>
         <p><strong>Testing fee paid:</strong> Rs. {data.fee}/- vide Rt No: {data.receipt}</p>
 
