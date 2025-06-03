@@ -242,7 +242,7 @@ aeedtrsmg@rediffmail.com
           Adverting to the above subject, 01 no of {data.capacity} {data.starRating} Distribution Transformer was tested at Shimoga Repair Center by the Asst Engineer (Ele)-2, DTR, MESCOM, Shimoga on {data.testDate}. The Tested Transformer is to be installed to {data.layout
           } in favour of {data.customer}, {data.village} village under self execution. The tested results of Transformer are found satisfactorily.
         </p>
-        <p><strong>Testing fee paid:</strong> Rs. {data.fee}/- vide Rt No: {data.receipt}</p>
+        <p><strong>Testing fee paid:</strong> Rs. {data.fee}/- vide Rt No: {data.receipt}{data.reseptdate}</p>
 
         <table border="1" cellPadding="5" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
