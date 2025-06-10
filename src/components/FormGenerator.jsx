@@ -28,6 +28,8 @@ export default function MescomReportForm() {
     sanctionLetter: '',
     eeLetter: '',
     layout: '',
+    testedat: '',
+    testedby: '',
   });
 
  
@@ -90,7 +92,9 @@ export default function MescomReportForm() {
     layout: ['LAYOUT',
 'DWS',
 'MSB',
-'ADPS']
+'ADPS'],
+testedat: ['Shimoga','Shikaripura','Sagara','Bhadrvathi'],
+testedby: ['AEE, DTR, MESCOM ','Asst Engineer (Ele)-1, DTR, MESCOM', 'Asst Engineer (Ele)-2, DTR, MESCOM']
     
   };
 
@@ -118,8 +122,9 @@ export default function MescomReportForm() {
                              fee: 'Testing Fee (e.g. 1180)',
           receipt: 'Receipt No  (e.g. 3361)',
                              reseptdate:'Receipt Date (e.g. 4.4.25)',
+          testedat: 'Tested At',
                              layout: 'layout',
-          
+          testedby: 'Tested BTY',
                               
           
           
@@ -239,10 +244,10 @@ aeedtrsmg@rediffmail.com
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>Ref:</strong> 1) Power Sanction Letter No: {data.sanctionLetter} Dated:{data.powerstationdate}<br/>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) EE Letter No: {data.eeLetter} Dated:{data.eltrdate}</p>
         <p>
-          Adverting to the above subject, 01 no of {data.capacity} {data.starRating} Distribution Transformer was tested at Shimoga Repair Center by the Asst Engineer (Ele)-2, DTR, MESCOM, Shimoga on {data.testDate}. The Tested Transformer is to be installed to {data.layout
+          Adverting to the above subject, 01 no of {data.capacity} {data.starRating} Distribution Transformer was tested at {data.testedat} Repair Center by the {data.testedby}, {data.testedat} on {data.testDate}. The Tested Transformer is to be installed to {data.layout
           } in favour of {data.customer}, {data.village} village under self execution. The tested results of Transformer are found satisfactorily.
         </p>
-        <p><strong>Testing fee paid:</strong> Rs. {data.fee}/- vide Rt No: {data.receipt}{data.reseptdate}</p>
+        <p><strong>Testing fee paid:</strong> Rs. {data.fee}/- vide Rt No: {data.receipt}&nbsp;/&nbsp;{data.reseptdate}</p>
 
         <table border="1" cellPadding="5" style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
